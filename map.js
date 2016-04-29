@@ -33,7 +33,7 @@ var carIconGreen = L.icon({
 
 var couvenhalle = [50.776726, 6.078790];
 
-var mymap = L.map('mapid').setView(couvenhalle, 13);
+var mymap = L.map('mapid').setView(couvenhalle, 11);
 
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoidGFteWNhci1kYXNoYm9hcmQiLCJhIjoiY2lubTAxeng3MDA5d3ZmbTI0cGgxNWF6eSJ9.7UtBXbrs0nw7fOVx_V9xQA', {
     attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -41,11 +41,6 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=p
     id: 'mapbox.streets',
     accessToken: 'pk.eyJ1IjoidGFteWNhci1kYXNoYm9hcmQiLCJhIjoiY2lubTAxeng3MDA5d3ZmbTI0cGgxNWF6eSJ9.7UtBXbrs0nw7fOVx_V9xQA'
 }).addTo(mymap);
-
-var test_data =[
-	{"position":{"lat":couvenhalle[0],"lon":couvenhalle[1],"time":"2014-04-18 09:41:00 UTC"},"reasons":"central_lock_changed,immobilizer_changed","fuel_level":"45","immobilizer":"unlocked","ignition":"off","central_lock":"locked","speed":"0","voltage":"12.66","mileage":"9438.1","doors":"closed","lights":"off","handbrake":"unlocked"},
-	{"position":{"lat":50.771294,"lon":6.093263,"time":"2014-04-18 09:41:00 UTC"},"reasons":"central_lock_changed,immobilizer_changed","fuel_level":"45","immobilizer":"unlocked","ignition":"off","central_lock":"locked","speed":"0","voltage":"12.66","mileage":"9438.1","doors":"closed","lights":"off","handbrake":"unlocked"}
-] 
 	
 
 
@@ -54,11 +49,10 @@ var test_data =[
 var markers = [];
 
 
-function update_markers(){
+function update_marker(){
 
-	$.get('http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/test222', function(data) {
+	$.get(url, function(data) {
 		console.log(data);
-        console.log(data['position']);
 
 		// Remove all Markers
 		$.each(markers, function(index, value) {
@@ -66,21 +60,94 @@ function update_markers(){
 		});
 
 		// Add Markers for test data
-		var m = L.marker([data['position']['lat'], data['position']['lon']], {icon: carIconGreen}).addTo(mymap);
-		m.bindPopup("<b>Fahrzeug Nr. 42</b><br>Fuel: 23%<br>Light: off<br>Handbrake: engaged<br>Immobilizer: unlocked");
-		
-		m.on('click', function(e) {
-        	this.openPopup();
-    	});
+		$.each(test_data, function(index, value) {
 
-		markers.push(m)
+			var m = L.marker([value['position']['lat'], value['position']['lon']], {icon: carIconRed}).addTo(mymap);
+			m.bindPopup("<b>Fahrzeug Nr. 42</b><br>Fuel: 23%<br>Light: off<br>Handbrake: engaged<br>Immobilizer: unlocked");
+			
+			m.on('click', function(e) {
+	        	this.openPopup();
+	    	});
+
+			markers.push(m)
+		});
+
 
 		update_markers();
 	});
 
 }
 
+var cars = [
+	{
+		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/1', 
+		'marker': null
+	} ,
+	{
+		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/2', 
+		'marker':  null
+	},
+	{
+		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/3', 
+		'marker': null
+	},
+	{
+		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/4', 
+		'marker': null
+	},
+	{
+		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/5', 
+		'marker': null
+	},
+	{
+		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/6', 
+		'marker': null
+	},
+	{
+		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/7', 
+		'marker': null
+	},
+	{
+		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/8', 
+		'marker': null
+	}
+];
 
-$('#get-data').click(function(){
-	update_markers();
+function add_marker(car_index) {
+	var car = cars[car_index];
+
+	$.get(car.url, function(data) {
+		// Remove old marker
+		if(cars[car_index]['marker'] != null)
+			mymap.removeLayer(cars[car_index]['marker']);
+
+		// Add new marker
+		var mark = L.marker([data['position']['lat'], data['position']['lon']], {icon: carIconRed}).addTo(mymap);
+			mark.bindPopup("<b>Fahrzeug Nr. 42</b><br>Fuel: 23%<br>Light: off<br>Handbrake: engaged<br>Immobilizer: unlocked");
+			mark.on('click', function(e) {
+	        	this.openPopup();
+	    	});
+
+	    cars[car_index]['marker'] = mark;
+
+	    update_charts(data)
+
+	    add_marker(car_index);
+	});
+
+
+}
+
+$(document).ready(function() {
+
+
+	add_marker(0);
+	add_marker(0);
+	/*add_marker(2);
+	add_marker(3);
+	add_marker(4);
+	add_marker(5);
+	add_marker(6);
+	add_marker(7);
+	add_marker(8);*/
 });
