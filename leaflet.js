@@ -58,6 +58,7 @@ function update_markers(){
 
 	$.get('http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/test', function(data) {
 		console.log(data);
+        console.log(data['position']);
 
 		// Remove all Markers
 		$.each(markers, function(index, value) {
@@ -65,18 +66,14 @@ function update_markers(){
 		});
 
 		// Add Markers for test data
-		$.each(test_data, function(index, value) {
+		var m = L.marker([data['position']['lat'], data['position']['lon']], {icon: carIconGreen}).addTo(mymap);
+		m.bindPopup("<b>Fahrzeug Nr. 42</b><br>Fuel: 23%<br>Light: off<br>Handbrake: engaged<br>Immobilizer: unlocked");
+		
+		m.on('click', function(e) {
+        	this.openPopup();
+    	});
 
-			var m = L.marker([value['position']['lat'], value['position']['lon']], {icon: carIconGreen}).addTo(mymap);
-			m.bindPopup("<b>Fahrzeug Nr. 42</b><br>Fuel: 23%<br>Light: off<br>Handbrake: engaged<br>Immobilizer: unlocked");
-			
-			m.on('click', function(e) {
-	        	this.openPopup();
-	    	});
-
-			markers.push(m)
-		});
-
+		markers.push(m)
 
 		update_markers();
 	});
