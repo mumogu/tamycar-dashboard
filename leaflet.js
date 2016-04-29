@@ -48,25 +48,42 @@ var test_data =[
 ] 
 	
 
+
+
+
 var markers = [];
 
+
+function update_markers(){
+
+	$.get('http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/test', function(data) {
+		console.log(data);
+
+		// Remove all Markers
+		$.each(markers, function(index, value) {
+			mymap.removeLayer(value)	
+		});
+
+		// Add Markers for test data
+		$.each(test_data, function(index, value) {
+
+			var m = L.marker([value['position']['lat'], value['position']['lon']], {icon: carIconGreen}).addTo(mymap);
+			m.bindPopup("<b>Fahrzeug Nr. 42</b><br>Fuel: 23%<br>Light: off<br>Handbrake: engaged<br>Immobilizer: unlocked");
+			
+			m.on('click', function(e) {
+	        	this.openPopup();
+	    	});
+
+			markers.push(m)
+		});
+
+
+		update_markers();
+	});
+
+}
+
+
 $('#get-data').click(function(){
-
-	// Remove all Markers
-	$.each(markers, function(index, value) {
-		mymap.removeLayer(value)	
-	});
-
-	// Add Markers for test data
-	$.each(test_data, function(index, value) {
-
-		var m = L.marker([value['position']['lat'], value['position']['lon']], {icon: carIconGreen}).addTo(mymap);
-		m.bindPopup("<b>Fahrzeug Nr. 42</b><br>Fuel: 23%<br>Light: off<br>Handbrake: engaged<br>Immobilizer: unlocked");
-		
-		m.on('click', function(e) {
-        	this.openPopup();
-    	});
-
-		markers.push(m)
-	});
+	update_markers();
 });
