@@ -56,7 +56,7 @@ var markers = [];
 
 function update_markers(){
 
-	$.get('http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/test', function(data) {
+	$.get('http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/test222', function(data) {
 		console.log(data);
         console.log(data['position']);
 

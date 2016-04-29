@@ -15,16 +15,54 @@
 
 	<style type="text/css">
 		div#mapid { 
-			height: 600px; 
+			height: 70%; 
+			width: 80%;
+			float:left;
 		}
+
+		div#car-list {
+			background-color: grey;
+			float:right;
+			width: 20%;
+			height: 70%;
+		}
+		div#car-details {
+			background-color: red;
+			height: 20%;
+			float:left;
+			width: 40%;
+		}
+		div#console {
+			background-color: blue;
+			float:left;
+			width: 40%;
+			height: 10%;
+		}
+		div#time-series {
+			background-color: pink;
+			height: 30%;
+			float: left;
+			width: 60%;
+		}
+
 	</style>
 
 </head>
 <body>
 	<div id="mapid"></div>
-	<div id="get-data" class="btn btn-secondary">Get Data</div>
+	<div id="car-list">
+		<ul>
+			<li>Car 1</li>
+			<li>Car 2</li>
+		</ul>
+	</div>
+	<div id="time-series">Time Series</div>
+	<div id="car-details">Car Details</div>
+	<div id="console">Console</div>
+	<!--<div id="get-data" class="btn btn-secondary">Get Data</div>-->
 </body>
 
-	<script src="leaflet.js"></script>
+	<script src="map.js"></script>
+	<script src="time-series.js"></script>
 
 </html>
