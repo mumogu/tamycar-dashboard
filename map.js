@@ -41,7 +41,7 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=p
     id: 'mapbox.streets',
     accessToken: 'pk.eyJ1IjoidGFteWNhci1kYXNoYm9hcmQiLCJhIjoiY2lubTAxeng3MDA5d3ZmbTI0cGgxNWF6eSJ9.7UtBXbrs0nw7fOVx_V9xQA'
 }).addTo(mymap);
-	
+
 
 
 
@@ -56,7 +56,7 @@ function update_marker(){
 
 		// Remove all Markers
 		$.each(markers, function(index, value) {
-			mymap.removeLayer(value)	
+			mymap.removeLayer(value)
 		});
 
 		// Add Markers for test data
@@ -64,7 +64,7 @@ function update_marker(){
 
 			var m = L.marker([value['position']['lat'], value['position']['lon']], {icon: carIconRed}).addTo(mymap);
 			m.bindPopup("<b>Fahrzeug Nr. 42</b><br>Fuel: 23%<br>Light: off<br>Handbrake: engaged<br>Immobilizer: unlocked");
-			
+
 			m.on('click', function(e) {
 	        	this.openPopup();
 	    	});
@@ -80,35 +80,35 @@ function update_marker(){
 
 var cars = [
 	{
-		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/1', 
+		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/1',
 		'marker': null
 	} ,
 	{
-		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/2', 
+		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/2',
 		'marker':  null
 	},
 	{
-		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/3', 
+		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/3',
 		'marker': null
 	},
 	{
-		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/4', 
+		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/4',
 		'marker': null
 	},
 	{
-		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/5', 
+		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/5',
 		'marker': null
 	},
 	{
-		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/6', 
+		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/6',
 		'marker': null
 	},
 	{
-		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/7', 
+		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/7',
 		'marker': null
 	},
 	{
-		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/8', 
+		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/8',
 		'marker': null
 	}
 ];
@@ -130,7 +130,7 @@ function add_marker(car_index) {
 
 	    cars[car_index]['marker'] = mark;
 
-	    update_charts(data)
+	    update_charts(data);
 
 	    add_marker(car_index);
 	});
