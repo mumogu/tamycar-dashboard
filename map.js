@@ -143,6 +143,10 @@ function add_marker(car_index) {
 
 
 	    add_marker(car_index);
+
+	    //mymap.baseLayer().redraw();
+
+	    console.log(cars[car_index]['marker']);
 	});
 
 
@@ -152,9 +156,24 @@ $(document).ready(function() {
 
 
 	add_marker(0);
-	add_marker(1);
+	setTimeout(function() { add_marker(1); }, 1000);
+	$('ul#cars').append('<li>Car 1</li>');
+	setTimeout(function() { add_marker(2); }, 2000);
+	$('ul#cars').append('<li>Car 2</li>');
+	setTimeout(function() { add_marker(3); }, 3000);
+	$('ul#cars').append('<li>Car 3</li>');
+	setTimeout(function() { add_marker(4); }, 4000);
+	$('ul#cars').append('<li>Car 4</li>');/*
+	setTimeout(function() { add_marker(5); }, 5000);
+	$('ul#cars').append('<li>Car 5</li>');
+	setTimeout(function() { add_marker(6); }, 6000);
+	$('ul#cars').append('<li>Car 6</li>');
+	setTimeout(function() { add_marker(7); }, 7000);*/
+
+
+	/*
 	add_marker(2);
-	add_marker(3);/*
+	add_marker(3);
 	add_marker(4);
 	add_marker(5);
 	add_marker(6);
