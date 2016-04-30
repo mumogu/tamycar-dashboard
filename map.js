@@ -53,8 +53,7 @@ var cars = [];
 
 
 
-
-
+var sc = Math.random();
 function carFactory() {
   this.createCar = function(carId) {
     var car = {};
@@ -62,7 +61,7 @@ function carFactory() {
 
     car.carId = carId;
 
-    car.url = 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/' + carId;
+    car.url = 'http://sexlinguistik.de/tamyca/fleetbutler/web/app_dev.php/car' + sc + '_' + carId;
     car.marker = null;
     car.history = [];
 
