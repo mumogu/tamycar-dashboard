@@ -46,136 +46,122 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=p
 
 
 
-var markers = [];
 
 
-function update_marker(){
-
-	$.get(url, function(data) {
-		console.log(data);
-
-		// Remove all Markers
-		$.each(markers, function(index, value) {
-			mymap.removeLayer(value)
-		});
-
-		// Add Markers for test data
-		$.each(test_data, function(index, value) {
-
-			var m = L.marker([value['position']['lat'], value['position']['lon']], {icon: carIconRed}).addTo(mymap);
-			m.bindPopup("<b>Fahrzeug Nr. 42</b><br>Fuel: 23%<br>Light: off<br>Handbrake: engaged<br>Immobilizer: unlocked");
-
-			m.on('click', function(e) {
-	        	this.openPopup();
-	    	});
-
-			markers.push(m)
-		});
+var cars = [];
 
 
-		update_markers();
-	});
 
+
+
+
+function carFactory() {
+  this.createCar = function(carId) {
+    var car = {};
+
+
+    car.carId = carId;
+
+    car.url = 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/' + carId;
+    car.marker = null;
+    car.history = [];
+
+    car.used = (Math.round(Math.random()) == 0 ? true : false);
+
+
+    car.update_marker = function(data) {
+
+      // Remove old marker
+      if(car.marker != null) {
+        //mymap.removeLayer(cars[car_index]['marker']);
+
+        car.marker.setLatLng([data['position']['lat'], data['position']['lon']]);
+        car.marker.update();
+      } else {
+        // Add new marker
+        car.marker = L.marker([data['position']['lat'], data['position']['lon']], {icon: carIconRed}).addTo(mymap);
+      }
+    }
+
+    car.callback = function(data) {
+
+      data.time = Date.now();
+
+      if(car.history.length == 0) {
+        data.speed = 0;
+      } else {
+        data.speed = car.history[car.history.length - 1].speed + Math.random()*10 - 5;
+
+        if(data.speed < 10) {
+          data.speed = 10;
+        }
+        if(data.speed > 300) {
+          data.speed = 300;
+        }
+
+      }
+
+
+      car.history.push(data);
+
+      car.update_marker(data);
+
+
+      data.reasons.forEach(function(reason) {
+
+    		if(reason == "ignition_changed") {
+
+    			if(data.ignition == "on") {
+            console.log("Car " + car.carId + " started.");
+    				car.used = true;
+    			} else {
+    				car.used = false;
+            console.log("Car " + car.carId + " stopped.");
+    			}
+          update_carsUsed();
+    		}
+    	});
+
+
+
+
+      update_graphs();
+
+
+      car.updateCar();
+    }
+
+    car.updateCar = function() {
+      $.get(this.url, this.callback);
+    }
+
+    toConsole("Car created: " + carId);
+
+
+    cars.push(car);
+    car.updateCar();
+
+  }
 }
 
-var cars = [
-	{
-		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/1',
-		'marker': null
-	} ,
-	{
-		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/2',
-		'marker':  null
-	},
-	{
-		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/3',
-		'marker': null
-	},
-	{
-		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/4',
-		'marker': null
-	},
-	{
-		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/5',
-		'marker': null
-	},
-	{
-		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/6',
-		'marker': null
-	},
-	{
-		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/7',
-		'marker': null
-	},
-	{
-		'url': 'http://sexlinguistik.de/tamyca/fleetbutler/web/app.php/8',
-		'marker': null
-	}
-];
-
-function add_marker(car_index) {
-	var car = cars[car_index];
-
-	$.get(car.url, function(data) {
-		// Remove old marker
-		if(cars[car_index]['marker'] != null) {
-			//mymap.removeLayer(cars[car_index]['marker']);
-
-			cars[car_index]['marker'].setLatLng([data['position']['lat'], data['position']['lon']]);
-			cars[car_index]['marker'].update();
-		} else {
-			// Add new marker
-			var mark = L.marker([data['position']['lat'], data['position']['lon']], {icon: carIconRed}).addTo(mymap);
-			cars[car_index]['marker'] = mark;
-		}
-			
-
-
-		
-			/*mark.bindPopup("<b>Fahrzeug Nr. 42</b><br>Fuel: 23%<br>Light: off<br>Handbrake: engaged<br>Immobilizer: unlocked");
-			mark.on('click', function(e) {
-	        	this.openPopup();
-	    	});
-*/
-	    
-
-	    update_charts(data, car_index);
-
-
-	    add_marker(car_index);
-
-	    //mymap.baseLayer().redraw();
-
-	    console.log(cars[car_index]['marker']);
-	});
-
-
+function update_graphs() {
+  update_speedGraph();
 }
+
+
+
+
 
 $(document).ready(function() {
 
+  var fac = new carFactory();
 
-	add_marker(0);
-	setTimeout(function() { add_marker(1); }, 1000);
-	$('ul#cars').append('<li>Car 1</li>');
-	setTimeout(function() { add_marker(2); }, 2000);
-	$('ul#cars').append('<li>Car 2</li>');
-	setTimeout(function() { add_marker(3); }, 3000);
-	$('ul#cars').append('<li>Car 3</li>');
-	setTimeout(function() { add_marker(4); }, 4000);
-	$('ul#cars').append('<li>Car 4</li>');/*
-	setTimeout(function() { add_marker(5); }, 5000);
-	$('ul#cars').append('<li>Car 5</li>');
-	setTimeout(function() { add_marker(6); }, 6000);
-	$('ul#cars').append('<li>Car 6</li>');
-	setTimeout(function() { add_marker(7); }, 7000);*/
+  fac.createCar(1);
+  fac.createCar(2);
+  fac.createCar(3);
+  fac.createCar(4);
+  fac.createCar(5);
+  fac.createCar(6);
+  fac.createCar(7);
 
-
-	/*
-	add_marker(2);
-	add_marker(3);
-	add_marker(4);
-	add_marker(5);
-	add_marker(6);
-	add_marker(7);*/
 });

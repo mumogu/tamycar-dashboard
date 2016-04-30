@@ -1,38 +1,7 @@
-car_history = [];
-
-
-toConsole('test');
-
-function update_charts(data, car_index) {
-
-	if(car_history[car_index] == undefined) {
-		car_history[car_index] = [];
-
-	}
-
-	car_history[car_index].push(data);
-
-
-
-	data.reasons.forEach(function(reason) {
-		//console.log(reason);
-		if(reason == "ignition_changed") {
-			console.log(data['ignition']);
-			if(data.ignition == "on") {
-				increase_carsInUse(data.time);
-			} else {
-				decrease_carsInUse(data.time);
-			}
-		}
-	});
-
-}
-
-
 	var dataPoints_carsInUse = [];
-	var chart = new CanvasJS.Chart("time-series", {
+	var chart_carsInUse = new CanvasJS.Chart("carsUsed_graph", {
 			title : {
-				text : "Cars in Use"
+				text : "Cars in Use (0 out of 0)"
 			},
 			data : [{
 					type : "stepLine",
@@ -41,38 +10,124 @@ function update_charts(data, car_index) {
 			]
 		});
 
-	chart.render();
+		function update_carsUsed() {
 
-	var cars_inUse = 0, cars_total = 0;
-	function increase_carsInUse(timestamp) {
-		if(cars_inUse == cars_total) {
-			console.log("Something went wrong!");
+		  var total = cars.length;
+			var used = 0;
 
-		} else {
-			cars_inUse++;
-			updateChart(timestamp);
+		  cars.forEach(function(car) {
+		    if(car.used) {
+					used++;
+				}
+		  });
+
+			dataPoints_carsInUse.push({
+				x : Date.now(),
+				y : used
+			});
+
+			chart_carsInUse.options.title.text = "Cars in Use (" + used + " out of " + total + ")";
+
+			chart_carsInUse.render();
+
 		}
-	}
 
-	function decrease_carsInUse(timestamp) {
-		if(cars_inUse == 0) {
-			console.log("Something went wrong!");
 
-		} else {
-			cars_inUse--;
-			updateChart(timestamp);
-		}
-	}
+	chart_carsInUse.render();
 
 
 
-	var updateChart = function (timestamp) {
 
-		dataPoints.push({
-			x : timestamp,
-			y : cars_inUse
+
+	var dataPoints_carsSpeed = [];
+	var chart_carsSpeed = new CanvasJS.Chart("carsSpeed_graph", {
+				title:{
+				text: "Multi-Series Line Chart"
+				},
+				data: [
+					{
+        type: "line",
+        dataPoints: [
+        { x: 10, y: 21 },
+        { x: 20, y: 25},
+        { x: 30, y: 20 },
+        { x: 40, y: 25 },
+        { x: 50, y: 27 },
+        { x: 60, y: 28 },
+        { x: 70, y: 28 },
+        { x: 80, y: 24 },
+        { x: 90, y: 26}
+
+        ]
+      },
+        {
+        type: "line",
+        dataPoints: [
+        { x: 10, y: 31 },
+        { x: 20, y: 35},
+        { x: 30, y: 30 },
+        { x: 40, y: 35 },
+        { x: 50, y: 35 },
+        { x: 60, y: 38 },
+        { x: 70, y: 38 },
+        { x: 80, y: 34 },
+        { x: 90, y: 44}
+
+        ]
+      }
+				]
+			});
+
+
+
+
+function update_speedGraph() {
+
+	var data = [];
+
+
+
+	cars.forEach(function(car) {
+
+		var points = [];
+
+		car.history.forEach(function(record) {
+
+			//console.log(record);
+
+
+
+
+			points.push({
+				//TODO: Change to record.time
+				x: record.time,
+				//TODO: Change to record.speed
+				y: record.speed
+			});
 		});
 
-		chart.render();
+		data.push({
+			type: 'line',
+			xValueType: 'dateTime',
+			dataPoints: points
+		});
 
-	};
+
+
+	});
+
+	chart_carsSpeed.options.data = data;
+
+	chart_carsSpeed.render();
+}
+
+chart_carsSpeed.render();
+
+
+var chartChange_blocked = false;
+
+$(function(){
+    $('.carousel').carousel({
+      interval: 5000
+    });
+});
