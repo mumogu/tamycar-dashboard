@@ -42,7 +42,7 @@
 	var dataPoints_carsSpeed = [];
 	var chart_carsSpeed = new CanvasJS.Chart("carsSpeed_graph", {
 				title:{
-				text: "Multi-Series Line Chart"
+				text: "Car Speeds"
 				},
 				data: [
 					{
@@ -123,11 +123,19 @@ function update_speedGraph() {
 
 chart_carsSpeed.render();
 
-
-var chartChange_blocked = false;
-
-$(function(){
-    $('.carousel').carousel({
-      interval: 5000
-    });
+$(document).ready(function() {
+	$('#time-series').carousel({
+		interval:   10000
+	});
 });
+
+function throwMsg() {
+
+	if(Math.floor(Math.random()*4) == 0) {
+		toConsole("Car " + Math.ceil(Math.random()*5) + " stopped w/o handbrake", "error");
+	} else {
+		toConsole("Car " + Math.ceil(Math.random()*5) + " stalled", "warning");
+	}
+}
+
+setInterval(function(){throwMsg()}, 15000);

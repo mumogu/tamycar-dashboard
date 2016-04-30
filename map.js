@@ -168,7 +168,7 @@ function carFactory() {
       $.get(this.url, this.callback);
     }
 
-    toConsole("Car created: " + carId);
+    toConsole("Car started (Id: " + carId + ")");
 
 
     cars.push(car);
