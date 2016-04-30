@@ -139,7 +139,7 @@ function add_marker(car_index) {
 */
 	    
 
-	    update_charts(data);
+	    update_charts(data, car_index);
 
 
 	    add_marker(car_index);
@@ -154,9 +154,9 @@ $(document).ready(function() {
 	add_marker(0);
 	add_marker(1);
 	add_marker(2);
-	add_marker(3);
+	add_marker(3);/*
 	add_marker(4);
 	add_marker(5);
 	add_marker(6);
-	add_marker(7);
+	add_marker(7);*/
 });
