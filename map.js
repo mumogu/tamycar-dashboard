@@ -66,8 +66,31 @@ function carFactory() {
     car.marker = null;
     car.history = [];
 
+    car.speed = 0;
+    car.fuel = 50;
+    car.ignition = 'on';
+    car.doors = 'closed';
+    car.lighs = 'off';
+    car.handbreak = 'engaged';
+
+    car.loc = null;
+
     car.used = (Math.round(Math.random()) == 0 ? true : false);
 
+    $('ul#cars').append('<li><button id="button-car-' + carId + '" type = "button" class = "btn btn-default">Car #' + carId + '</button></li>');
+    $('#button-car-'+carId).click(function() {
+      $('#car-details').html('<ul>' +
+        '<li><b>Speed:</b> '+(car.speed).toFixed(2)+'</li>' +
+        '<li><b>Fuel Level:</b> '+car.fuel+'</li>' +
+        '<li><b>Ignition:</b> '+car.ignition+'</li>' +
+        '<li><b>Doors:</b> '+car.doors+'</li>' +
+        '<li><b>Lights:</b> '+car.lights+'</li>' +
+        '<li><b>Handbreak:</b> '+car.handbreak+'</li>' +
+        '</ul>');
+
+      if (car.loc != null)
+        mymap.panTo(car.loc);
+    });
 
     car.update_marker = function(data) {
 
@@ -81,6 +104,17 @@ function carFactory() {
         // Add new marker
         car.marker = L.marker([data['position']['lat'], data['position']['lon']], {icon: carIconRed}).addTo(mymap);
       }
+
+
+      car.speed = data['speed'];
+      car.fuel = data['fuel_level'];
+      car.ignition = data['ignition'];
+      car.doors = data['doors'];
+      car.lights = data['lights'];
+      car.handbreak = data['handbreak'];
+
+      car.loc = new L.LatLng(data['position']['lat'], data['position']['lon']);
+
     }
 
     car.callback = function(data) {
