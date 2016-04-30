@@ -118,19 +118,30 @@ function add_marker(car_index) {
 
 	$.get(car.url, function(data) {
 		// Remove old marker
-		if(cars[car_index]['marker'] != null)
-			mymap.removeLayer(cars[car_index]['marker']);
+		if(cars[car_index]['marker'] != null) {
+			//mymap.removeLayer(cars[car_index]['marker']);
 
-		// Add new marker
-		var mark = L.marker([data['position']['lat'], data['position']['lon']], {icon: carIconRed}).addTo(mymap);
-			mark.bindPopup("<b>Fahrzeug Nr. 42</b><br>Fuel: 23%<br>Light: off<br>Handbrake: engaged<br>Immobilizer: unlocked");
+			cars[car_index]['marker'].setLatLng([data['position']['lat'], data['position']['lon']]);
+			cars[car_index]['marker'].update();
+		} else {
+			// Add new marker
+			var mark = L.marker([data['position']['lat'], data['position']['lon']], {icon: carIconRed}).addTo(mymap);
+			cars[car_index]['marker'] = mark;
+		}
+			
+
+
+		
+			/*mark.bindPopup("<b>Fahrzeug Nr. 42</b><br>Fuel: 23%<br>Light: off<br>Handbrake: engaged<br>Immobilizer: unlocked");
 			mark.on('click', function(e) {
 	        	this.openPopup();
 	    	});
+*/
+	    
 
-	    cars[car_index]['marker'] = mark;
+	    
 
-	    update_charts(data)
+	    //update_charts(data)
 
 	    add_marker(car_index);
 	});
@@ -142,12 +153,11 @@ $(document).ready(function() {
 
 
 	add_marker(0);
-	add_marker(0);
-	/*add_marker(2);
+	add_marker(1);
+	add_marker(2);
 	add_marker(3);
 	add_marker(4);
 	add_marker(5);
 	add_marker(6);
 	add_marker(7);
-	add_marker(8);*/
 });
