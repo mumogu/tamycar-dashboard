@@ -119,7 +119,7 @@ function carFactory() {
     car.callback = function(data) {
 
       data.time = Date.now();
-
+/*
       if(car.history.length == 0) {
         data.speed = 0;
       } else {
@@ -133,6 +133,7 @@ function carFactory() {
         }
 
       }
+      */
 
 
       car.history.push(data);
