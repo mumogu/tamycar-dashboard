@@ -36,17 +36,30 @@
 			float:left;
 			width: 40%;
 		}
-		div#console {
-			background-color: blue;
+		div#console-container {
 			float:left;
 			width: 40%;
 			height: 10%;
+			overflow-y: scroll;
 		}
 		div#time-series {
 			background-color: pink;
 			height: 30%;
 			float: left;
 			width: 60%;
+		}
+
+		li {
+			color: black;
+			list-style-type: none;
+		}
+
+		li.errorLog {
+			color: red;
+		}
+
+		li.warningLog {
+			color:orange;
 		}
 
 	</style>
@@ -62,10 +75,15 @@
 	</div>
 	<div id="time-series">Time Series</div>
 	<div id="car-details">Car Details</div>
-	<div id="console">Console</div>
+	<div id="console-container">
+		<ul id="console">
+
+		</ul>
+	</div>
 	<!--<div id="get-data" class="btn btn-secondary">Get Data</div>-->
 </body>
 
+	<script src ="console.js"></script>
 	<script src="time-series.js"></script>
 	<script src="map.js"></script>
 

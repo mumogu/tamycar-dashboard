@@ -1,16 +1,30 @@
 car_history = [];
 
+
+toConsole('test');
+
 function update_charts(data, car_index) {
+
 	if(car_history[car_index] == undefined) {
 		car_history[car_index] = [];
-		console.log(data);
 
-		cars_total++;
 	}
 
 	car_history[car_index].push(data);
 
-	//if(data.)
+
+
+	data.reasons.forEach(function(reason) {
+		//console.log(reason);
+		if(reason == "ignition_changed") {
+			console.log(data['ignition']);
+			if(data.ignition == "on") {
+				increase_carsInUse(data.time);
+			} else {
+				decrease_carsInUse(data.time);
+			}
+		}
+	});
 
 }
 
@@ -52,16 +66,13 @@ function update_charts(data, car_index) {
 
 
 
-	var updateChart = function () {
-
-		yVal = yVal + Math.round(5 + Math.random() * (-5 - 5));
-      	updateCount++;
+	var updateChart = function (timestamp) {
 
 		dataPoints.push({
-			y : yVal
+			x : timestamp,
+			y : cars_inUse
 		});
 
-        chart.options.title.text = "Update " + updateCount;
 		chart.render();
 
 	};
